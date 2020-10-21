@@ -1,0 +1,8 @@
+{
+	"g_logs_obj" : "ToFile",
+	"g_logs_path" : "Z:\\Logs_Executor",
+	"g_logs_file_name" : "logs.txt",
+	"data_provider" : "Nanex",
+	"brokerage" : "IB"
+ }
+ 

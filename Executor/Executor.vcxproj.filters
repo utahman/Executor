@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Brokerages">
+      <UniqueIdentifier>{1a2fb0b9-e309-46fd-a262-825012b2103b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataProviders">
+      <UniqueIdentifier>{fbe69f97-aa9e-442f-8330-ff8384073476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Symbols">
+      <UniqueIdentifier>{54efc278-e6f8-4d75-bc77-f0bea8bb2311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui">
+      <UniqueIdentifier>{3e28d83e-70af-40fc-8418-a0bac451295e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logs">
+      <UniqueIdentifier>{bf0508f9-d8ee-4442-be3a-42b156fd6631}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{9ec81019-c10c-4229-80f2-c70aceae8219}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brokerages\IB">
+      <UniqueIdentifier>{7a56b370-35da-439e-8c22-4d847fec5c28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataProviders\Nanex">
+      <UniqueIdentifier>{00f4be8a-4cbd-4aea-90f2-57258c4f271a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui\Simple">
+      <UniqueIdentifier>{0a6c6e71-f162-4497-8d22-f91ce43c560f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logs\ToFile">
+      <UniqueIdentifier>{1332b8f8-e6df-4eba-8014-cea24423dc26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Symbols\Stock">
+      <UniqueIdentifier>{5341a872-ea10-4620-aca1-d8d93efcb420}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Symbols\StockOption">
+      <UniqueIdentifier>{b8ffe981-2b1b-47f1-9cd6-234bf6e08f02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Symbols\Forex">
+      <UniqueIdentifier>{2c238d65-2ed8-424a-b881-a0450863059d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Symbols\Future">
+      <UniqueIdentifier>{518a5e06-f8ac-4845-87bf-1e077c223e2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Symbols\Crypto">
+      <UniqueIdentifier>{3c0acf68-4111-4428-b25d-40aae4491bef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algos">
+      <UniqueIdentifier>{148a6561-0a61-4a4f-93ef-dcdf48bda1ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algos\MovingAverage">
+      <UniqueIdentifier>{bbe8a53f-a5dc-4c5c-b010-a4b0739cdcf0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Brokerages\IB\BrokerageIB.cpp">
+      <Filter>Brokerages\IB</Filter>
+    </ClCompile>
+    <ClCompile Include="DataProviders\Nanex\DataProviderNanex.cpp">
+      <Filter>DataProviders\Nanex</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbols\ISymbol.cpp">
+      <Filter>Symbols</Filter>
+    </ClCompile>
+    <ClCompile Include="Gui\Simple\GuiSimple.cpp">
+      <Filter>Gui\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="Algos\MovingAverage\AlgoMovingAverage.cpp">
+      <Filter>Algos\MovingAverage</Filter>
+    </ClCompile>
+    <ClCompile Include="Logs\ToFile\LogsToFile.cpp">
+      <Filter>Logs\ToFile</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbols\Stock\SymbolStock.cpp">
+      <Filter>Symbols\Stock</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Utils\Utils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PropertySheet.props" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Brokerages\IBrokerage.h">
+      <Filter>Brokerages</Filter>
+    </ClInclude>
+    <ClInclude Include="Brokerages\IB\BrokerageIB.h">
+      <Filter>Brokerages\IB</Filter>
+    </ClInclude>
+    <ClInclude Include="DataProviders\IDataProvider.h">
+      <Filter>DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="DataProviders\Nanex\DataProviderNanex.h">
+      <Filter>DataProviders\Nanex</Filter>
+    </ClInclude>
+    <ClInclude Include="Gui\IGui.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Logs\ILogs.h">
+      <Filter>Logs</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbols\ISymbol.h">
+      <Filter>Symbols</Filter>
+    </ClInclude>
+    <ClInclude Include="DataProcessor.h" />
+    <ClInclude Include="Gui\Simple\GuiSimple.h">
+      <Filter>Gui\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="Algos\IAlgo.h">
+      <Filter>Algos</Filter>
+    </ClInclude>
+    <ClInclude Include="Algos\MovingAverage\AlgoMovingAverage.h">
+      <Filter>Algos\MovingAverage</Filter>
+    </ClInclude>
+    <ClInclude Include="Logs\ToFile\LogsToFile.h">
+      <Filter>Logs\ToFile</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbols\Stock\SymbolStock.h">
+      <Filter>Symbols\Stock</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h" />
+  </ItemGroup>
+</Project>
