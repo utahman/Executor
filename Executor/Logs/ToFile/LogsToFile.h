@@ -33,8 +33,8 @@ public:
 		GetLocalTime(&tm);
 
 		// Find a name for a new (non-existing) file
-		fs::path fn(_path);
-		std::string fn_add = sformat("%02d-%02d-%02d_%02d-%02d-%02d_%s",
+		std::filesystem::path fn(_path);
+		std::string fn_add = sformat("%02d-%02d-%02d  %02d-%02d-%02d %s",
 			tm.wYear, tm.wMonth, tm.wDay,
 			tm.wHour, tm.wMinute, tm.wSecond,
 			_file_name.c_str());

@@ -4,9 +4,6 @@
 #include "pch.h"
 #include "Config.h"
 
-using namespace winrt;
-using namespace Windows::Foundation;
-
 Config g;
 
 

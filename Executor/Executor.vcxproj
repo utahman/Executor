@@ -123,6 +123,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Symbols\ISymbol.h" />
     <ClInclude Include="Symbols\Stock\SymbolStock.h" />
+    <ClInclude Include="Symbols\SymbolsArray.h" />
     <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>

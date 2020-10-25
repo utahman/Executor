@@ -132,5 +132,8 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Symbols\SymbolsArray.h">
+      <Filter>Symbols</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

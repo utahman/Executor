@@ -5,6 +5,7 @@
 #include "winrt/base.h"
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Windows.Data.json.h>
 
 #include <iostream>
 #include <stdio.h>
@@ -20,4 +21,6 @@
 #include <filesystem>
 
 using namespace std;
-namespace fs = std::filesystem;
+using namespace winrt;
+using namespace Windows::Foundation;
+using namespace Windows::Data::Json;

@@ -5,7 +5,6 @@
 #include <string>
 #include <fstream>
 #include <streambuf>
-#include <winrt/Windows.Data.json.h>
 #include "Config.h"
 
 // Here is the only place where we include files with real implementation
@@ -16,9 +15,6 @@
 #include "Nanex/DataProviderNanex.h"
 #include "Simple/GuiSimple.h"
 
-using namespace winrt;
-using namespace Windows::Data::Json;
-
 
 void Config::updateSystemTime()
 {
@@ -27,28 +23,56 @@ void Config::updateSystemTime()
 	_system_msec = _system_sec + _system_tm.wMilliseconds;
 }
 
-std::string get(JsonObject& obj, const wchar_t* param)
+
+std::string Config::get(const wchar_t* param)
 {
-	return winrt::to_string(obj.GetNamedString(param));
+	if (_obj.HasKey(param))
+		return winrt::to_string(_obj.GetNamedString(param));
+	return std::string();
 }
+
+
+std::string Config::get(const wchar_t* section, const wchar_t* param)
+{
+	if (_obj.HasKey(section))
+	{
+		JsonObject st = _obj.GetNamedObject(section);
+		if (_obj.HasKey(param))
+			return winrt::to_string(st.GetNamedString(param));
+	}
+	return std::string();
+}
+
+
+int Config::get(const wchar_t* section, const wchar_t* param, int def_value)
+{
+	if (_obj.HasKey(section))
+	{
+		JsonObject st = _obj.GetNamedObject(section);
+		if (_obj.HasKey(param))
+			return std::atoi(winrt::to_string(st.GetNamedString(param)).c_str());
+	}
+	return def_value;
+}
+
 
 void Config::Load()
 {
 	std::ifstream t("_executor_config.txt");
 	std::wstring str((std::istreambuf_iterator<char>(t)),
 		std::istreambuf_iterator<char>());
-	JsonObject obj = JsonObject::Parse(hstring(str.c_str()));
+	_obj = JsonObject::Parse(hstring(str.c_str()));
 
 	// First of all create logs object
-	_logs_obj = get(obj, L"g_logs_obj");
-	_logs_path = get(obj, L"g_logs_path");
-	_logs_file_name = get(obj, L"g_logs_file_name");
+	_logs_obj = get(L"logs_obj");
+	_logs_path = get(L"logs_path");
+	_logs_file_name = get(L"logs_file_name");
 	if (_logs_obj == "ToFile")
 		_logs = new LogsToFile(_logs_path, _logs_file_name);
 	_logs->Add(_system_msec, format("Starting"));
 
-	_data_provider = get(obj, L"data_provider");
-	_brokerage = get(obj, L"brokerage");
+	_data_provider = get(L"data_provider");
+	_brokerage = get(L"brokerage");
 
 	if (g.GetDataProvider() == "Nanex")
 		_data = new DataProviderNanex();

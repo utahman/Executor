@@ -13,6 +13,18 @@ void MSecToTimeGlobal(int glmsec, int& hour, int& min, int& sec, int& msec)
 }
 
 
+int TimeToSecGlobal(int hour, int minute, int second)
+{
+	return hour * 3600 + minute * 60 + second;
+}
+
+
+int TimeToMillisecGlobal(int hour, int minute, int second, int milliseond)
+{
+	return TimeToSecGlobal(hour, minute, second) * 1000 + milliseond;
+}
+
+
 std::string* format(const char* fmt_str, ...)
 {
 	int final_n, n = ((int)strlen(fmt_str)) * 2;

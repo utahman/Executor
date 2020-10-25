@@ -40,6 +40,11 @@ public:
 		DeleteCriticalSection(&_cs);
 	}
 
+	void StartExiting()
+	{
+		_exiting = true;
+	}
+
 	void StopDataProcessor()
 	{
 		_exiting = true;

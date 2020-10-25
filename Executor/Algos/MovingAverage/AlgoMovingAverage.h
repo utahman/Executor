@@ -11,6 +11,17 @@ public:
 	{
 
 	}
+	virtual bool CheckToAddSymbol(int symbol_type, int exchange, char* symbol_name)
+	{
+		// Here we must decide if we are going to use this symbol
+		//
+		symbol_type;
+		exchange;
+		symbol_name;
+
+		return true;
+	}
+
 	void Stop()
 	{
 	}
