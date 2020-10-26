@@ -5,27 +5,21 @@
 #include "Config.h"
 #include "ISymbol.h"
 
-#define MAX_STOCK_SYMBOLS 90000
+#define MAX_STOCK_SYMBOLS 100000	// 100K is enough to make sparse hash table
 
 
 class SymbolIndex
 {
-	int _idx;
-	char _name[STOCK_NAME_MAX_SIZE];
-	SymbolIndex* _next;
+	int _idx = -1;
+	char _name[SYMBOL_NAME_MAX_SIZE] = { 0 };
+	SymbolIndex* _next = NULL;
 
 public:
 	SymbolIndex(int idx = 0, char* name = NULL)
 	{
 		_idx = idx;
 		if (name)
-		{
-			strncpy_s(_name, STOCK_NAME_MAX_SIZE, name, STOCK_NAME_MAX_SIZE - 1);
-			_name[STOCK_NAME_MAX_SIZE - 1] = 0;
-		}
-		else
-			_name[0] = 0;
-		_next = NULL;
+			strncpy_s(_name, SYMBOL_NAME_MAX_SIZE, name, SYMBOL_NAME_MAX_SIZE);
 	}
 	const char* Name() { return _name; }
 	int GetIndex() { return _idx; }
@@ -33,7 +27,7 @@ public:
 	SymbolIndex* GetNext() { return _next; }
 	int Compare(const char* search_name)
 	{
-		return strncmp(search_name, this->Name(), STOCK_NAME_MAX_SIZE);
+		return strncmp(search_name, this->Name(), SYMBOL_NAME_MAX_SIZE);
 	}
 };
 
@@ -47,7 +41,7 @@ class SymbolsArray
 
 public:
 	SymbolsArray()
-		: _QuickSearchList(100000) // 100K is enough to make sparse hash table
+		: _QuickSearchList(MAX_STOCK_SYMBOLS)
 	{
 	}
 	//void DestroyAllSymbols();

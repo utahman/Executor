@@ -20,7 +20,6 @@ public:
 public:
 	IDataProvider()
 	{
-
 	}
 	~IDataProvider()
 	{

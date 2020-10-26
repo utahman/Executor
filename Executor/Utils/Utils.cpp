@@ -4,12 +4,16 @@
 #include "pch.h"
 #include "Utils.h"
 
+
+
 void MSecToTimeGlobal(int glmsec, int& hour, int& min, int& sec, int& msec)
 {
 	hour = glmsec / 3600000;
+	glmsec -= hour * 3600000;
 	min = glmsec / 60000;
+	glmsec -= min * 60000;
 	sec = glmsec / 1000;
-	msec = glmsec - 1000 * sec;
+	msec = glmsec - sec * 1000;
 }
 
 

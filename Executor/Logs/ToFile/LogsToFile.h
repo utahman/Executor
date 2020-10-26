@@ -73,11 +73,7 @@ protected:
 			MSecToTimeGlobal(pdata->_msec, hour, minn, sec, msec);
 
 			fprintf(_fh, "%02d:%02d:%02d.%003d\t%s\n",
-				hour,
-				minn,
-				sec,
-				msec,
-				pdata->_str->c_str());
+				hour, minn, sec, msec, pdata->_str->c_str());
 			::fflush(_fh);
 
 			delete pdata->_str;

@@ -4,7 +4,7 @@
 #pragma once
 #include "Config.h"
 
-#define STOCK_NAME_MAX_SIZE		12
+#define SYMBOL_NAME_MAX_SIZE 32
 
 
 // Common interface for all symbols classes
@@ -14,7 +14,20 @@ class ISymbol : public DataProcessor
 	int	_index = 0;
 	int _exchange = 0;
 	int _security_type = IDataProvider::TYPE_UNK;
-	char _name[STOCK_NAME_MAX_SIZE] = { 0 };
+	char _name[SYMBOL_NAME_MAX_SIZE] = { 0 };
+
+	float _pe = 0;
+	float _beta = 0;
+	float _yield = 0;
+	float _52WeekHigh = 0;
+	float _52WeekLow = 0;
+	float _volatility = 0;
+	float _prev_day_open = 0;
+	float _prev_day_high = 0;
+	float _prev_day_low = 0;
+	float _prev_day_close = 0;
+	float _average_volume = 0; // Historical average volume
+
 
 	const int POST_LAST = 0;
 	const int POST_BID_ASK = 1;
@@ -28,7 +41,6 @@ class ISymbol : public DataProcessor
 		int size;
 		int msec;
 	};
-
 	struct _POST_BID_ASK : FastData
 	{
 		float bid;
@@ -37,7 +49,6 @@ class ISymbol : public DataProcessor
 		int ask_size;
 		int msec;
 	};
-
 	struct _POST_PREMARKET_LAST : FastData
 	{
 		float price;
@@ -52,7 +63,7 @@ public:
 	}
 	void set_security_type(int stype) { _security_type = stype; }
 	int get_security_type() { return _security_type;	}
-	void set_name(char* name) { strncpy(_name, name, STOCK_NAME_MAX_SIZE); }
+	void set_name(char* name) { strncpy_s(_name, SYMBOL_NAME_MAX_SIZE, name, SYMBOL_NAME_MAX_SIZE); }
 	char* get_name() { return _name; }
 	void set_index(int index) { _index = index; }
 	int get_index() { return _index; }
@@ -90,18 +101,6 @@ public:
 		post->msec = time_msec;
 		Data_Post(post);
 	}
-
-	float _volatility = 0;
-	float _average_volume = 0; // Historical average volume
-	float _yield = 0;
-	float _pe = 0;
-	float _beta = 0;
-	float _52WeekHigh = 0;
-	float _52WeekLow = 0;
-	float _prev_day_open = 0;
-	float _prev_day_high = 0;
-	float _prev_day_low = 0;
-	float _prev_day_close = 0;
 
 	void set_volatility(float v) { _volatility = v; }
 	float get_volatility() { return _volatility; }

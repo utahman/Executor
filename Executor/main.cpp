@@ -10,7 +10,7 @@ Config g;
 int main()
 {
     winrt::init_apartment();
-    g.Load(); // Loads config and creates objects
+    g.LoadAndCreateObjects(); // Loads config and creates objects
 
     while (g._run)
     {
@@ -25,7 +25,7 @@ int main()
                 g._gui->Show();
                 break;
             case 'o': // Reload configuration file
-                g.Load();
+                g.LoadAndCreateObjects();
                 break;
             case 's': // Stop
                 if (IDYES == MessageBox(NULL, "Stop?",

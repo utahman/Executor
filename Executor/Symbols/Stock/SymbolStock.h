@@ -17,14 +17,15 @@ public:
 	~SymbolStock()
 	{
 	}
-	virtual void Data_Process(FastData* /*pdata*/)	// From IDataProcessor
-	{
-	}
-
 	void Show()
 	{
 	}
 	void Stop()
+	{
+	}
+
+protected:
+	virtual void Data_Process(FastData* /*pdata*/)	// From IDataProcessor
 	{
 	}
 };

@@ -21,8 +21,9 @@ class Config
 	std::string _logs_obj;
 	std::string _logs_path;
 	std::string _logs_file_name;
-	std::string _data_provider;
-	std::string _brokerage;
+	std::string _name_data_provider;
+	std::string _name_brokerage;
+	std::string _name_algo;
 
 public:
 	bool volatile _run = true;				// App will run until this is true
@@ -35,16 +36,17 @@ public:
 	ILogs* _logs = NULL;					// Global app logging
 	IGui* _gui = NULL;						// GUI
 	IAlgo* _algo = NULL;					// Algorithm that does trading
-	SymbolsArray _symbols2;					// Symbols that receive updates
+	SymbolsArray _symbols;					// Symbols that receive updates
 
 public:
-	void Load();
+	void LoadAndCreateObjects();
 	void updateSystemTime();
 	std::string get(const wchar_t* param);
 	std::string get(const wchar_t* section, const wchar_t* param);
 	int get(const wchar_t* section, const wchar_t* param, int def_value);
-	std::string& GetDataProvider() { return _data_provider; }
-	std::string& GetBrokerage() { return _brokerage; }
+	std::string& GetDataProviderName() { return _name_data_provider; }
+	std::string& GetBrokerageName() { return _name_brokerage; }
+	std::string& GetAlgoName() { return _name_algo; }
 };
 
 extern Config g;

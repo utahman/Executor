@@ -25,4 +25,10 @@ public:
 	void Stop()
 	{
 	}
+
+protected:
+	virtual void DataProcessor::Data_Process(FastData* data) // From DataProcessor
+	{
+		data;
+	}
 };

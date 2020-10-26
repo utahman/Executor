@@ -59,7 +59,8 @@ protected:
 	volatile bool		_thread_running = false;
 	volatile bool		_exiting = false;
 	volatile int		_tapeStatus = -1;
-	char				_tapeName[MAX_PATH] = { 0 };
+	std::string			_tapes_folder;
+	std::string			_tape_name;
 	bool				_initialized = false;
 	int					_recid = 0; // Record id in the nanex tape
 	bool				_bEndOfTape = false;
@@ -76,6 +77,7 @@ public:
 	{
 		Stop();
 	}
+	bool Start();
 	void Stop()
 	{
 		_exiting = true;
@@ -85,13 +87,6 @@ public:
 	}
 	bool EndOfTape() { return _bEndOfTape; }
 	bool IsThreadRunning() { return _thread_running; }
-	bool MD_Initialize(char* tapeName);
-	//virtual Symbol* MD_CreateNewSymbolObj(const char* name, USHORT exchange, char Security) = 0; // here external app creates and returns an object inherited from Symbol
-	//virtual void MD_ProcessFilteredUpdate(float last, Symbol* s) = 0;
-	//virtual void MD_ProcessUpdate_OtherValues(WORD flags, int sec, Symbol* s) = 0;
-	//virtual int  MD_ProcessUpdate_TimeMsec(int msec_nt) = 0;						// To check if real-time data is fresh
-	//virtual void MD_Status(const char*);											// To display status
-
 	static char* GetNameFromNxCoreName(char* core_name);
 	static int ExceptionFilter(unsigned int code, struct _EXCEPTION_POINTERS* ep);
 	void AddForegnSymbol(char* name, USHORT exchange, char SecurityType);

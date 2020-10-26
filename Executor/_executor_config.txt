@@ -3,14 +3,16 @@
 	"logs_path" : "Z:/Logs_Executor",
 	"logs_file_name" : "logs.txt",
 	"data_provider" : "Nanex",
-	"brokerage" : "IB"
+	"algo" : "MovingAverage",
+	"brokerage" : "IB",
 	"Nanex" :
 	{
-		"dll_path" : ""C:/My/Nanex/NxCoreAPI64.dll"",
 		"logs_obj" : "ToFile",
 		"logs_path" : "Z:/Logs_Executor",
 		"logs_file_name" : "logsNanex.txt",
+		"dll_path" : "C:/My/Nanex/NxCoreAPI64.dll",
+		"tapes_folder" : "E:/NxCoreData",
+		"tape_name" : "20201023.GS.nx2",
 		"use_securities" : 1
 	}
- }
- 
+}

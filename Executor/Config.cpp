@@ -11,6 +11,7 @@
 // of all objects. Everywhere else we must use common interfaces only
 //
 #include "ToFile/LogsToFile.h"
+#include "MovingAverage/AlgoMovingAverage.h"
 #include "IB/BrokerageIB.h"
 #include "Nanex/DataProviderNanex.h"
 #include "Simple/GuiSimple.h"
@@ -37,7 +38,7 @@ std::string Config::get(const wchar_t* section, const wchar_t* param)
 	if (_obj.HasKey(section))
 	{
 		JsonObject st = _obj.GetNamedObject(section);
-		if (_obj.HasKey(param))
+		if (st.HasKey(param))
 			return winrt::to_string(st.GetNamedString(param));
 	}
 	return std::string();
@@ -49,14 +50,14 @@ int Config::get(const wchar_t* section, const wchar_t* param, int def_value)
 	if (_obj.HasKey(section))
 	{
 		JsonObject st = _obj.GetNamedObject(section);
-		if (_obj.HasKey(param))
-			return std::atoi(winrt::to_string(st.GetNamedString(param)).c_str());
+		if (st.HasKey(param))
+			return int(st.GetNamedNumber(param) + 0.5);
 	}
 	return def_value;
 }
 
 
-void Config::Load()
+void Config::LoadAndCreateObjects()
 {
 	std::ifstream t("_executor_config.txt");
 	std::wstring str((std::istreambuf_iterator<char>(t)),
@@ -71,14 +72,19 @@ void Config::Load()
 		_logs = new LogsToFile(_logs_path, _logs_file_name);
 	_logs->Add(_system_msec, format("Starting"));
 
-	_data_provider = get(L"data_provider");
-	_brokerage = get(L"brokerage");
+	_name_algo = get(L"algo");
+	_name_data_provider = get(L"data_provider");
+	_name_brokerage = get(L"brokerage");
 
-	if (g.GetDataProvider() == "Nanex")
+	if (g.GetAlgoName() == "MovingAverage")
+		_algo = new AlgoMovingAverage();
+	_logs->Add(_system_msec, format("Using algo: %s", g.GetAlgoName().c_str()));
+
+	if (g.GetDataProviderName() == "Nanex")
 		_data = new DataProviderNanex();
-	_logs->Add(_system_msec, format("Added data provider: %s", g.GetDataProvider().c_str()));
+	_logs->Add(_system_msec, format("Using data provider: %s", g.GetDataProviderName().c_str()));
 
-	if (g.GetBrokerage() == "IB")
+	if (g.GetBrokerageName() == "IB")
 		_broker = new BrokerageIB();
-	_logs->Add(_system_msec, format("Added brokerage: %s", g.GetBrokerage().c_str()));
+	_logs->Add(_system_msec, format("Using brokerage: %s", g.GetBrokerageName().c_str()));
 }

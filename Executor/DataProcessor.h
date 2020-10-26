@@ -55,8 +55,6 @@ public:
 		}
 	}
 
-	virtual void Data_Process(FastData* pdata) = 0; // To overwrite
-
 	void Data_Post(FastData* pdata = NULL)
 	{
 		if (!_exiting) // Do not accept new data if exiting
@@ -85,6 +83,8 @@ public:
 	}
 
 private:
+	virtual void Data_Process(FastData* pdata) = 0; // To overwrite
+
 	static unsigned int __stdcall data_Thread(void* p_this)
 	{
 		DataProcessor* obj = static_cast<DataProcessor*>(p_this);

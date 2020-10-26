@@ -12,17 +12,24 @@ DataProviderNanex* DataProviderNanex::_object = NULL;
 DataProviderNanex::DataProviderNanex()
 {
 	_object = this;
-	auto section = L"Nanex";
+	const wchar_t* section = L"Nanex";
 	auto logs_obj = g.get(section, L"logs_obj");
-	auto logs_path = g.get(section, L"log_path");
+	auto logs_path = g.get(section, L"logs_path");
 	auto logs_file_name = g.get(section, L"logs_file_name");
-	if (logs_obj == "ToFile")
-		_logs = new LogsToFile(logs_path, logs_file_name);
-	_logs->Add(g._system_msec, format("Nanex starting"));
 
 	// Always use a copy of the dll, not the one in Program Files
 	_dll_path = g.get(section, L"dll_path");
+
+	if (logs_obj == "ToFile")
+		_logs = new LogsToFile(logs_path, logs_file_name);
+	_logs->Add(g._system_msec, format("Nanex starting"));
 	_UseSecurities = g.get(section, L"use_securities", 1);
+
+	_tapes_folder = g.get(section, L"tapes_folder");
+	_tape_name = g.get(section, L"tape_name"); // Leave blank to run latest tape
+	_tape_name = sformat("%s/%s", _tapes_folder.c_str(), _tape_name.c_str());
+
+	Start();
 }
 
 
@@ -117,7 +124,7 @@ int DataProviderNanex::processNxCoreExgQuote(const NxCoreSystem* /*pNxCoreSys*/,
 	const NxCoreQuote& cquote = quote.coreQuote;
 	if (cquote.Refresh == 0)	// Refresh==0 when everything is ok
 	{
-		ISymbol* s = g._symbols2.ByIndex(idx);
+		ISymbol* s = g._symbols.ByIndex(idx);
 		bool changed = false;
 		float bid = 0, ask = 0;
 		int bid_size = 0, ask_size = 0;
@@ -190,7 +197,7 @@ int DataProviderNanex::processNxCoreTrade(const NxCoreSystem* /*pNxCoreSys*/, co
 			{
 				// Continue if market open OR update is not for stock
 				//
-				ISymbol* s = g._symbols2.ByIndex(idx);
+				ISymbol* s = g._symbols.ByIndex(idx);
 				if (_market_open_US_stocks || s->get_security_type() != TYPE_STOCK)
 				{
 					// Use locally retrieved time_msec
@@ -205,7 +212,7 @@ int DataProviderNanex::processNxCoreTrade(const NxCoreSystem* /*pNxCoreSys*/, co
 			if (price > 0)
 			{
 				// Use locally retrieved time_msec
-				ISymbol* s = g._symbols2.ByIndex(idx);
+				ISymbol* s = g._symbols.ByIndex(idx);
 				int size = nt.VolumeType == NxTVT_INCRVOL ? nt.Size : 1;
 				s->set_price_premarket(price, float(nt.TotalVolume), size, time_msec);
 			}
@@ -219,7 +226,7 @@ bool DataProviderNanex::IsGoodNCStockSymbolName(char* raw_name)
 	if (raw_name == NULL || raw_name[0] != 'e')	// 'e' is used by NcCore for equity symbols
 		return false;
 	int len = (int)strlen(raw_name) - 1; // -1 to remove 'e'
-	if (len < 1 || len > STOCK_NAME_MAX_SIZE)
+	if (len < 1 || len > SYMBOL_NAME_MAX_SIZE)
 		return false;
 	for (int ii = 1; ii < len; ii++)	// Start from 1 because first is 'e' (see comment above)
 	{
@@ -234,7 +241,7 @@ bool DataProviderNanex::IsGoodNCFuturesSymbolName(char* raw_name)
 	if (raw_name == NULL || raw_name[0] != 'f')	// 'f' is used by NcCore for futures symbols
 		return false;
 	int len = (int)strlen(raw_name) - 1; // -1 to remove 'f'
-	if (len < 1 || len > STOCK_NAME_MAX_SIZE) // Same size for futures
+	if (len < 1 || len > SYMBOL_NAME_MAX_SIZE) // Same size for futures
 		return false;
 	for (int ii = 1; ii < len; ii++)	// Start from 1 because first is 'f' (see comment above)
 	{
@@ -339,21 +346,21 @@ void DataProviderNanex::AddSymbol(char* clean_name, USHORT exchange, char /*Secu
 	pNxCoreMessage->coreHeader.pnxStringSymbol->UserData1 = -1;
 	pNxCoreMessage->coreHeader.pnxStringSymbol->UserData2 = -1;
 
-	if (g._symbols2.GetNumSymbols() == 0)	// Make symbol with zero index invalid
+	if (g._symbols.GetNumSymbols() == 0)	// Make symbol with zero index invalid
 	{
 		ISymbol* sb = new SymbolStock(_UnusedStockName, exchange);
-		g._symbols2.Add(sb);
+		g._symbols.Add(sb);
 	}
 
 	// Before adding symbol to the list make sure it has unique name (otherwise we can't find later which is which)
 	// To find uniqueness we add name to the 'm_QuickSearchList' which returns 'false' if name is not unique
 	// Skipping some stocks with non-unique name will not impact us because such event is rare (2 or so a day)
 	//
-	ISymbol* s = new SymbolStock(clean_name, exchange);
+	auto s = new SymbolStock(clean_name, exchange);
 	//Symbol* s = MD_CreateNewSymbolObj(clean_name, exchange, SecurityType);
 	if (s) // Since we ignore some names it can be NULL
 	{
-		if (true == g._symbols2.Add(s))
+		if (true == g._symbols.Add(s))
 		{
 			if (pNxCoreMessage) // For NC native symbols only
 				pNxCoreMessage->coreHeader.pnxStringSymbol->UserData1 = s->get_index();
@@ -391,7 +398,7 @@ int DataProviderNanex::processNxCoreSymChg(const NxCoreSystem* /*pNxCoreSys*/, c
 	}
 
 	int idx = old->UserData1;
-	if (idx <= 0 || idx >= g._symbols2.GetNumSymbols())
+	if (idx <= 0 || idx >= g._symbols.GetNumSymbols())
 		return NxCALLBACKRETURN_CONTINUE;	// -------------- not a subscribed symbol ---------->
 
 	char* old_name = GetNameFromNxCoreName(old->String);
@@ -410,7 +417,7 @@ int DataProviderNanex::processNxCoreSymChg(const NxCoreSystem* /*pNxCoreSys*/, c
 	USHORT new_exchange = pNxCoreMessage->coreHeader.ListedExg;
 	char* new_name = GetNameFromNxCoreName(now->String);
 
-	ISymbol* s = g._symbols2.ByIndex(idx);
+	ISymbol* s = g._symbols.ByIndex(idx);
 	if (s == NULL)
 	{
 		OnError(6, "processNxCoreSymChg");
@@ -427,7 +434,7 @@ int DataProviderNanex::processNxCoreSymChg(const NxCoreSystem* /*pNxCoreSys*/, c
 	//
 	if (strcmp(s->get_name(), new_name) != 0)	// If name is really new; not just exchange change
 	{
-		g._symbols2.AddToQuickSearchList(idx, new_name);
+		g._symbols.AddToQuickSearchList(idx, new_name);
 	}
 
 	s->set_name(new_name);				// Set new name (name is already normilized)
@@ -473,13 +480,13 @@ int DataProviderNanex::processNxCoreCategory(const NxCoreSystem* pNxCoreSys, con
 	USHORT ctype = c.pnxStringCategory->Atom;
 
 	int idx = pNxCoreMessage->coreHeader.pnxStringSymbol->UserData1;
-	if (idx <= 0 || idx >= (int)g._symbols2.GetNumSymbols())
+	if (idx <= 0 || idx >= (int)g._symbols.GetNumSymbols())
 		return NxCALLBACKRETURN_CONTINUE;
 
 	const NxTime& t = pNxCoreSys->nxTime;
 	set_time(t.Hour, t.Minute, t.Second, t.Millisecond);
 
-	ISymbol* symbol = g._symbols2.ByIndex(idx);
+	ISymbol* symbol = g._symbols.ByIndex(idx);
 
 	if (ctype == CATEGORY_TYPE_DTNEquityFundamental)
 	{
@@ -518,7 +525,6 @@ int DataProviderNanex::processNxCoreCategory(const NxCoreSystem* pNxCoreSys, con
 	}
 	else if (ctype == CATEGORY_TYPE_OHLC)
 	{
-		const NxTime& t = pNxCoreSys->nxTime;
 		if (t.Hour < 6) // We saw OHCL sometimes coming at the end of day - ignore those
 		{
 			float open = 0, high = 0, low = 0, close = 0;
@@ -581,7 +587,7 @@ UINT DataProviderNanex::ThreadNxCoreAPI(void*)
 			// of "" will select the active stream that NxCoreAccess is receiving.
 			//
 			unsigned int flags = 0;			// NxCF_EXCLUDE_CRC_CHECK;
-			_object->_core.ProcessTape(_object->_tapeName, 0, flags, 0, CoreCallback);
+			_object->_core.ProcessTape(_object->_tape_name.c_str(), 0, flags, 0, CoreCallback);
 
 			// ProcessTape will not return until either your callback function (NxCoreAPICallback)
 			// returns NxCALLBACKRETURN_STOP, or the tape has been processed to completion,
@@ -632,22 +638,18 @@ int __stdcall DataProviderNanex::CoreCallback(const NxCoreSystem* pNxCoreSys, co
 }
 
 
-bool DataProviderNanex::MD_Initialize(char* tapeName)
+bool DataProviderNanex::Start()
 {
 	if (_initialized)
 		return false; // -------- only once ------->
 	_initialized = true;
 	_bEndOfTape = false;
 
-	if (tapeName)
-		strcpy_s(_tapeName, MAX_PATH, tapeName);
-
-
 	DWORD idThread;
 	HANDLE hndThread = ::CreateThread(0, 0, (LPTHREAD_START_ROUTINE)ThreadNxCoreAPI, 0, 0, &idThread);
 	if (hndThread)
 	{
-		_logs->Add(0, format("Tape started: \"%s\"", _tapeName));
+		_logs->Add(0, format("Tape started: \"%s\"", _tape_name.c_str()));
 		::CloseHandle(hndThread);
 		return true;
 	}
