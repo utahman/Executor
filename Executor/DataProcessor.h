@@ -91,33 +91,37 @@ private:
 		obj->_exited = false;
 		FastData* pdata = NULL;
 
-		while (!obj->_exiting)
+		while (1)
 		{
 			WaitForSingleObject(obj->_event, 1000); // No more than 1 sec: important
-			// TODO: reset event here?
-
-			if (obj->_begin1)
+			if (!obj->_exiting)
 			{
-				// Retrieve data as quick as possible
-				//
-				EnterCriticalSection(&obj->_cs);
-				pdata = obj->_begin1;
-				obj->_begin1 = obj->_end = NULL;
-				LeaveCriticalSection(&obj->_cs);
-			}
 
-			if (pdata)
-			{
-				do
+				if (obj->_begin1)
 				{
-					obj->Data_Process(pdata);
-					FastData* todel = pdata;
-					pdata = pdata->_next;
-					delete todel;
-				} while (pdata);
+					// Retrieve data as quick as possible
+					//
+					EnterCriticalSection(&obj->_cs);
+					pdata = obj->_begin1;
+					obj->_begin1 = obj->_end = NULL;
+					LeaveCriticalSection(&obj->_cs);
+				}
+
+				if (pdata)
+				{
+					do
+					{
+						obj->Data_Process(pdata);
+						FastData* todel = pdata;
+						pdata = pdata->_next;
+						delete todel;
+					} while (pdata);
+				}
+				else
+					obj->Data_Process(NULL); // Must call anyway once a sec
 			}
 			else
-				obj->Data_Process(NULL); // Must call anyway once a sec
+				break;
 		}
 
 		// We do not care about freeing memory since app is closing

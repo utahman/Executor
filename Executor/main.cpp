@@ -21,7 +21,7 @@ int main()
         {
             switch (std::tolower(_getch()))
             {
-            case 'u': // Show GUI
+            case 'g': // Show GUI
                 g._gui->Show();
                 break;
             case 'o': // Reload configuration file

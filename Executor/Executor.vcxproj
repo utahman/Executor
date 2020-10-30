@@ -121,6 +121,7 @@
     <ClInclude Include="Logs\ILogs.h" />
     <ClInclude Include="Logs\ToFile\LogsToFile.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Symbols\ISymbol.h" />
     <ClInclude Include="Symbols\Stock\SymbolStock.h" />
     <ClInclude Include="Symbols\SymbolsArray.h" />
@@ -147,6 +148,9 @@
     <Text Include="readme.txt">
       <DeploymentContent>false</DeploymentContent>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Executor.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

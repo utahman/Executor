@@ -135,5 +135,9 @@
     <ClInclude Include="Symbols\SymbolsArray.h">
       <Filter>Symbols</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Executor.rc" />
   </ItemGroup>
 </Project>

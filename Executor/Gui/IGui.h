@@ -9,17 +9,10 @@ class IGui : public DataProcessor
 public:
 	IGui()
 	{
-
 	}
 	~IGui()
 	{
-
 	}
-
-	void Show()
-	{
-	}
-	void Stop()
-	{
-	}
+	virtual void Show() = 0;
+	virtual void Stop() = 0;
 };

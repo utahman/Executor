@@ -4,6 +4,7 @@
 	"logs_file_name" : "logs.txt",
 	"data_provider" : "Nanex",
 	"algo" : "MovingAverage",
+	"gui" : "GuiSimple",
 	"brokerage" : "IB",
 	"Nanex" :
 	{

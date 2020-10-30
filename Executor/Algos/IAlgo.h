@@ -9,13 +9,10 @@ class IAlgo : public DataProcessor
 public:
 	IAlgo()
 	{
-
 	}
 	~IAlgo()
 	{
-
 	}
 	virtual bool CheckToAddSymbol(int symbol_type, int exchange, char* symbol_name) = 0;
-
 	virtual void Stop() = 0;
 };

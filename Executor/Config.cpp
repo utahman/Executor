@@ -73,6 +73,7 @@ void Config::LoadAndCreateObjects()
 	_logs->Add(_system_msec, format("Starting"));
 
 	_name_algo = get(L"algo");
+	_name_gui = get(L"gui");
 	_name_data_provider = get(L"data_provider");
 	_name_brokerage = get(L"brokerage");
 
@@ -87,4 +88,8 @@ void Config::LoadAndCreateObjects()
 	if (g.GetBrokerageName() == "IB")
 		_broker = new BrokerageIB();
 	_logs->Add(_system_msec, format("Using brokerage: %s", g.GetBrokerageName().c_str()));
+
+	if (g.GetGuiName() == "GuiSimple")
+		_gui = new GuiSimple();
+	_logs->Add(_system_msec, format("Using GUI: %s", g.GetGuiName().c_str()));
 }

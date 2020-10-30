@@ -61,6 +61,10 @@ public:
 	ISymbol()
 	{
 	}
+	~ISymbol()
+	{
+		StopDataProcessor();
+	}
 	void set_security_type(int stype) { _security_type = stype; }
 	int get_security_type() { return _security_type;	}
 	void set_name(char* name) { strncpy_s(_name, SYMBOL_NAME_MAX_SIZE, name, SYMBOL_NAME_MAX_SIZE); }

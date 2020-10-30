@@ -4,15 +4,15 @@
 #pragma once
 
 #include "Config.h"
-#include "Utils.h"
+#include "Utils/Utils.h"
 #include "DataProcessor.h"
-#include "IBrokerage.h"
-#include "IDataProvider.h"
-#include "ISymbol.h"
-#include "SymbolsArray.h"
-#include "IAlgo.h"
-#include "IGui.h"
-#include "ILogs.h"
+#include "Brokerages/IBrokerage.h"
+#include "DataProviders/IDataProvider.h"
+#include "Symbols/ISymbol.h"
+#include "Symbols/SymbolsArray.h"
+#include "Algos/IAlgo.h"
+#include "Gui/IGui.h"
+#include "Logs/ILogs.h"
 
 
 class Config
@@ -24,6 +24,7 @@ class Config
 	std::string _name_data_provider;
 	std::string _name_brokerage;
 	std::string _name_algo;
+	std::string _name_gui;
 
 public:
 	bool volatile _run = true;				// App will run until this is true
@@ -47,6 +48,7 @@ public:
 	std::string& GetDataProviderName() { return _name_data_provider; }
 	std::string& GetBrokerageName() { return _name_brokerage; }
 	std::string& GetAlgoName() { return _name_algo; }
+	std::string& GetGuiName() { return _name_gui; }
 };
 
 extern Config g;

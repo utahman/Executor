@@ -4,22 +4,24 @@
 #pragma once
 #include "Config.h"
 
-class GuiSimple : IGui
+class GuiSimple : public IGui
 {
 public:
 	GuiSimple()
 	{
-
 	}
 	~GuiSimple()
 	{
-
 	}
 
-	void Show()
+	void Show();
+	void Stop()
 	{
 	}
-	void Stop()
+
+private:	// Internal methods
+
+	virtual void Data_Process(FastData* /*pdata*/)	// From DataProcessor
 	{
 	}
 };
