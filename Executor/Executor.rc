@@ -1,6 +1,5 @@
-// Copyright(C) 2020 utahman https://github.com/utahman
-// MIT License http://www.opensource.org/licenses/mit-license.php
-
+// Microsoft Visual C++ generated resource script.
+//
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
@@ -58,7 +57,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,198,155,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,252,155,50,14
-    CONTROL         "",IDC_LIST_ORDERS,"SysListView32",LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,295,117
+    CONTROL         "",IDC_LIST_ORDERS,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,295,131
 END
 
 

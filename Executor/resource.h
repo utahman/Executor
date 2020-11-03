@@ -1,7 +1,7 @@
-// Copyright(C) 2020 utahman https://github.com/utahman
-// MIT License http://www.opensource.org/licenses/mit-license.php
-
 //{{NO_DEPENDENCIES}}
+// Microsoft Visual C++ generated include file.
+// Used by Executor.rc
+//
 #define IDD_SIMPLE_GUI                  101
 #define IDC_LIST_ORDERS                 1001
 
